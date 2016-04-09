@@ -7,6 +7,9 @@
 //
 
 #import "Pokemon.h"
+#import "ViewController.h"
+#import "PokemonStore.h"
+
 
 
 @implementation Pokemon
@@ -14,151 +17,211 @@
 - (id)initWithPokemonId:(NSString *)aPokemonId {
    
     if (self = [super init]) {
+        
 
-    self.pokemonId = aPokemonId;
-    self.pokemonUrl = [NSString stringWithFormat:@"%s%s%@/", URL_BASE, URL_POKEMON, self.pokemonUrl];
+        [self getPokemonWithId:aPokemonId onCompletion:^(NSDictionary * _Nullable dataDict, NSString * _Nullable errorMessage) {
+            
+            if (dataDict) {
+                
+                            NSString *name = (NSString *) [dataDict valueForKey:@"name"];
+                            if (name) {
+                                _name = name;
+                                NSLog(@"%@", name);
+                            } else {
+                                _name = @"";
+                            }
+                
+                
+                            NSString *defense = (NSString *) [dataDict valueForKey:@"defense"];
+                            if (defense) {
+                                _defense = defense;
+                                NSLog(@"%@",defense);
+                            } else {
+                                _defense = @"";
+                            }
+                
+                
+                            NSString *attack = (NSString *) [dataDict valueForKey:@"attack"];
+                            if (attack) {
+                                _attack = attack;
+                                NSLog(@"%@",attack);
+                            } else {
+                                _attack = @"";
+                            }
+                
+                            
+                            NSString *height = (NSString *) [dataDict valueForKey:@"height"];
+                            if (height) {
+                                _height = height;
+                                NSLog(@"%@",height);
+                            } else {
+                                _height = @"";
+                            }
+                            
+                            NSString *weight = (NSString *) [dataDict valueForKey:@"weight"];
+                            if (weight) {
+                                _weight = weight;
+                                NSLog(@"%@",weight);
+                            } else {
+                                _weight = @"";
+                            }
+                
+                [self getPokemonImage:dataDict onCompletion:^(NSDictionary * _Nullable dataDict, NSString * _Nullable errorMessage) {
+                    
+                    if (dataDict) {
+                        
+                        NSString *imageUrl = [NSString stringWithFormat:@"%s%@", URL_BASE, [dataDict valueForKey:@"image"]];
+                        _imageUrl = imageUrl;
+                        NSLog(@"%@",imageUrl);
+                        
+                    }
+                    
+                }];
+                
+                [self getPokemonType:dataDict onCompletion:^(NSDictionary * _Nullable dataDict, NSString * _Nullable errorMessage) {
+                    
+                    if (dataDict) {
+                        
+                        NSString *type = [dataDict objectForKey:@"name"];
+                        _type = type;
+                        NSLog(@"%@", type);
+                    
+                    }
+                
+                }];
+                
+                
+                            
+                [self getPokemonDescription:dataDict onCompletion:^(NSDictionary * _Nullable dataDict, NSString * _Nullable errorMessage) {
+                   
+                    if (dataDict) {
+                        NSString *description = [dataDict objectForKey:@"description"];
+                        _descr = description;
+                        NSLog(@"%@", description);
+
+                    }
+                    
+                }];
+                
+            }
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"finishedDownloading" object:nil];
+        }];
+        
+
     }
     return self;
 }
 
-- (void)downloadPokemonDetails:(onComplete)completionHandler moveCompletion:(onComplete)moveCompletionHandler {
-    NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    AFURLSessionManager *manager = [[AFURLSessionManager alloc]initWithSessionConfiguration:configuration];
+-(void)getPokemonWithId: (NSString * __nonnull)pokeId onCompletion:(nullable onComplete)completionHandler{
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%s%s%@", URL_BASE, URL_POKEMON, pokeId]];
+    NSURLSession *session = [NSURLSession sharedSession];
     
-    NSURL *url = [NSURL URLWithString:self.pokemonUrl];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    
-    NSURLSessionDataTask *dataTask = [manager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+    [[session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
-        if (error) {
-            NSLog(@"Error: %@", error);
+        if (data != nil) {
+            NSError *err;
+            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&err];
+            
+            if (err == nil) {
+                completionHandler(json, nil);
+                
+            } else {
+                completionHandler(nil, @"Data is currupt");
+            }
         } else {
-            NSDictionary<NSString *, id> *results = (NSDictionary<NSString*, id> *) responseObject;
             
-            NSString *name = (NSString *) [results valueForKey:@"name"];
-            if (name) {
-                self.name = name;
-            } else {
-                self.name = @"";
-            }
-            
-            NSString *species = (NSString *) [results valueForKey:@"species"];
-            if (species) {
-                self.species = species;
-            } else {
-                self.species = @"";
-            }
-            
-            NSString *defense = (NSString *) [results valueForKey:@"defense"];
-            if (defense) {
-                self.defense = defense;
-            } else {
-                self.defense = @"";
-            }
-            
-            NSString *attack = (NSString *) [results valueForKey:@"attack"];
-            if (attack) {
-                self.attack = attack;
-            } else {
-                self.attack = @"";
-            }
-            
-            NSString *height = (NSString *) [results valueForKey:@"height"];
-            if (height) {
-                self.height = height;
-            } else {
-                self.height = @"";
-            }
-            
-            NSString *weight = (NSString *) [results valueForKey:@"weight"];
-            if (weight) {
-                self.weight = weight;
-            } else {
-                self.weight = @"";
+            completionHandler(nil, @"problem connecting with the server");
         }
-            
-            
-        NSArray<NSDictionary<NSString *, NSString *> *> *imageArray = (NSArray<NSDictionary<NSString *, NSString *> *> *) [results valueForKey:@"sprites"];
         
-            if (imageArray && imageArray.count > 0) {
-                
-                NSString *url = [NSString stringWithFormat:@"%s%@", URL_BASE, [imageArray valueForKey:@"resource_uri"]];
-                NSURL *spritesUrl = [NSURL URLWithString:url];
-                NSURLRequest *spritesRequest = [NSURLRequest requestWithURL:spritesUrl];
-                NSURLSessionDataTask *spritesDataTask = [manager dataTaskWithRequest:spritesRequest completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-                    
-                    NSDictionary<NSString *, NSString *> *results = (NSDictionary<NSString *, NSString *> *) responseObject;
-                    if (responseObject) {
-                        NSString *imageUrlString = [results valueForKey:@"image"];
-                        
-                        if (imageUrlString) {
-                            self.imageUrl = imageUrlString;
-                        } else {
-                            self.imageUrl = @"";
-                        }
-                        
-                    
-                    
-                    } else {
-                        self.imageUrl = @"";
-                    }
-                    
-                    completionHandler();
-                    
-                    
-                }];
-                
-                [spritesDataTask resume];
-                
-                
-                
-                
-                
-            }
-            
+    }] resume];
+    
+}
+
+-(void)getPokemonImage: (NSDictionary * __nonnull)pokeDict onCompletion:(nullable onComplete)completionHandler{
+    NSArray *spritesArray = [pokeDict valueForKey:@"sprites"];
+    NSString *spritesUrlString = [spritesArray[0] valueForKey:@"resource_uri"];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%s%@", URL_BASE, spritesUrlString]];
+    NSURLSession *session = [NSURLSession sharedSession];
+    
+    [[session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
-        NSArray<NSDictionary<NSString *, NSString *> *> *descriptionArray = (NSArray<NSDictionary<NSString *, NSString *> *> *) [results valueForKey:@"description"];
+        if (data != nil) {
+            NSError *err;
+            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&err];
+
             
-            if (descriptionArray && descriptionArray.count > 0) {
+            if (err == nil) {
+                completionHandler(json, nil);
                 
-                NSString *url = [NSString stringWithFormat:@"%s%@", URL_BASE, [descriptionArray[0] valueForKey:@"resource_uri"]];
-                NSURL *descriptionUrl = [NSURL URLWithString:url];
-                NSURLRequest *descriptionRequest = [NSURLRequest requestWithURL:descriptionUrl];
-                
-                NSURLSessionDataTask *descriptionDataTask = [manager dataTaskWithRequest:descriptionRequest completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-                    
-                    NSDictionary<NSString *, id> *results = (NSDictionary<NSString *, id> *) responseObject;
-                    if(responseObject) {
-                        NSString *pokemonDescription = [(NSString *) results valueForKey:@"description"];
-                        if (pokemonDescription) {
-                            self.descr = pokemonDescription;
-                        } else {
-                            self.descr = @"";
-                        }
-                        
-                        
-                    } else {
-                        self.descr = @"";
-                    }
-                    
-                    completionHandler();
-                    
-                    
-                }];
-                
-                [descriptionDataTask resume];
-                
+            } else {
+                completionHandler(nil, @"Data is currupt");
             }
+        } else {
             
+            completionHandler(nil, @"problem connecting with the server");
         }
-    }];
-    
-    [dataTask resume];
-    
+        
+    }] resume];
     
 }
 
 
+-(void)getPokemonDescription: (NSDictionary * __nonnull)pokeDict onCompletion:(nullable onComplete)completionHandler{
+    NSArray *descriptionsArray = [pokeDict valueForKey:@"descriptions"];
+    NSString *descriptionsUrlString = [descriptionsArray[0] valueForKey:@"resource_uri"];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%s%@", URL_BASE, descriptionsUrlString]];
+    NSURLSession *session = [NSURLSession sharedSession];
+    
+    [[session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        if (data != nil) {
+            NSError *err;
+            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&err];
+            
+            
+            if (err == nil) {
+                completionHandler(json, nil);
+                
+            } else {
+                completionHandler(nil, @"Data is currupt");
+            }
+        } else {
+            
+            completionHandler(nil, @"problem connecting with the server");
+        }
+        
+    }] resume];
+    
+}
+
+
+-(void)getPokemonType: (NSDictionary * __nonnull)pokeDict onCompletion:(nullable onComplete)completionHandler{
+    NSArray *typesArray = [pokeDict valueForKey:@"types"];
+    NSString *typesUrlString = [typesArray[0] valueForKey:@"resource_uri"];
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%s%@", URL_BASE, typesUrlString]];
+    NSURLSession *session = [NSURLSession sharedSession];
+    
+    [[session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        
+        if (data != nil) {
+            NSError *err;
+            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&err];
+            
+            
+            if (err == nil) {
+                completionHandler(json, nil);
+                
+            } else {
+                completionHandler(nil, @"Data is currupt");
+            }
+        } else {
+            
+            completionHandler(nil, @"problem connecting with the server");
+        }
+        
+    }] resume];
+    
+}
 
 
 

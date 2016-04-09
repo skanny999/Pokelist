@@ -13,24 +13,27 @@
 #define URL_POKEMON "/api/v1/pokemon/"
 
 
-typedef void(^onComplete)();
+
 
 
 @interface Pokemon : NSObject
 
 
-@property (strong, nonatomic) NSString *name;
-@property (strong, nonatomic) NSString *pokemonId;
-@property (strong, nonatomic) NSString *descr;
-@property (strong, nonatomic) NSString *species;
-@property (strong, nonatomic) NSString *height;
-@property (strong, nonatomic) NSString *weight;
-@property (strong, nonatomic) NSString *attack;
-@property (strong, nonatomic) NSString *defense;
-@property (strong, nonatomic) NSString *imageUrl;
+@property (strong, nonatomic, readonly) NSString *name;
+@property (strong, nonatomic, readonly) NSString *pokemonId;
+@property (strong, nonatomic, readonly) NSString *descr;
+@property (strong, nonatomic, readonly) NSString *type;
+@property (strong, nonatomic, readonly) NSString *height;
+@property (strong, nonatomic, readonly) NSString *weight;
+@property (strong, nonatomic, readonly) NSString *attack;
+@property (strong, nonatomic, readonly) NSString *defense;
+@property (strong, nonatomic, readonly) NSString *imageUrl;
 @property (strong, nonatomic) NSString *pokemonUrl;
+@property (strong, nonatomic) NSMutableArray<Pokemon*> *pokemons;
+
 
 - (id)initWithPokemonId:(NSString *)aPokemonId;
-- (void)downloadPokemonDetails:(onComplete)completionHandler moveCompletion:(onComplete)moveCompletionHandler;
+
+
 
 @end

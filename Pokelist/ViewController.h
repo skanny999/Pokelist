@@ -7,9 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Pokemon.h"
 
-@interface ViewController : UIViewController
 
+@interface ViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+
+
+@property (nonatomic, strong) NSMutableArray<Pokemon *> *pokemons;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 

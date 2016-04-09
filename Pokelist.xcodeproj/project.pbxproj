@@ -15,6 +15,10 @@
 		8B4EE7FE1CB7DFD8005B51E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B4EE7FD1CB7DFD8005B51E5 /* Assets.xcassets */; };
 		8B4EE8011CB7DFD8005B51E5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B4EE7FF1CB7DFD8005B51E5 /* LaunchScreen.storyboard */; };
 		8B4EE80B1CB7E1B8005B51E5 /* Pokemon.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B4EE80A1CB7E1B8005B51E5 /* Pokemon.m */; };
+		8B4EE8101CB80A3F005B51E5 /* PokeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B4EE80F1CB80A3F005B51E5 /* PokeCell.m */; };
+		8B4EE8121CB84294005B51E5 /* libAFNetworking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B4EE8111CB84294005B51E5 /* libAFNetworking.a */; };
+		8B4EE8151CB90DD2005B51E5 /* PokemonStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B4EE8141CB90DD2005B51E5 /* PokemonStore.m */; };
+		8BE560CD1CB96088000B04A2 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BE560CC1CB96088000B04A2 /* DetailViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +35,13 @@
 		8B4EE8021CB7DFD8005B51E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B4EE8091CB7E1B8005B51E5 /* Pokemon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pokemon.h; sourceTree = "<group>"; };
 		8B4EE80A1CB7E1B8005B51E5 /* Pokemon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pokemon.m; sourceTree = "<group>"; };
+		8B4EE80E1CB80A3F005B51E5 /* PokeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokeCell.h; sourceTree = "<group>"; };
+		8B4EE80F1CB80A3F005B51E5 /* PokeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PokeCell.m; sourceTree = "<group>"; };
+		8B4EE8111CB84294005B51E5 /* libAFNetworking.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAFNetworking.a; path = "../../../../Library/Developer/Xcode/DerivedData/Pokelist-cnvatfxjoshobobgvkbcxbpnkair/Build/Products/Debug-iphonesimulator/AFNetworking/libAFNetworking.a"; sourceTree = "<group>"; };
+		8B4EE8131CB90DD2005B51E5 /* PokemonStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PokemonStore.h; sourceTree = "<group>"; };
+		8B4EE8141CB90DD2005B51E5 /* PokemonStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PokemonStore.m; sourceTree = "<group>"; };
+		8BE560CB1CB96088000B04A2 /* DetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
+		8BE560CC1CB96088000B04A2 /* DetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		914FE30AA31A8E6CE594CB20 /* Pods-Pokelist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pokelist.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pokelist/Pods-Pokelist.debug.xcconfig"; sourceTree = "<group>"; };
 		B312F5149590842C6DB574FF /* libPods-Pokelist.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Pokelist.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -40,6 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B4EE8121CB84294005B51E5 /* libAFNetworking.a in Frameworks */,
 				210CBB28DB21642AE763C38A /* libPods-Pokelist.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -59,6 +71,7 @@
 		565BA39AB1074ADB53F748A9 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8B4EE8111CB84294005B51E5 /* libAFNetworking.a */,
 				B312F5149590842C6DB574FF /* libPods-Pokelist.a */,
 			);
 			name = Frameworks;
@@ -112,6 +125,8 @@
 			children = (
 				8B4EE8091CB7E1B8005B51E5 /* Pokemon.h */,
 				8B4EE80A1CB7E1B8005B51E5 /* Pokemon.m */,
+				8B4EE8131CB90DD2005B51E5 /* PokemonStore.h */,
+				8B4EE8141CB90DD2005B51E5 /* PokemonStore.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -119,6 +134,8 @@
 		8B4EE80C1CB8067B005B51E5 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				8B4EE80E1CB80A3F005B51E5 /* PokeCell.h */,
+				8B4EE80F1CB80A3F005B51E5 /* PokeCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -128,6 +145,8 @@
 			children = (
 				8B4EE7F71CB7DFD8005B51E5 /* ViewController.h */,
 				8B4EE7F81CB7DFD8005B51E5 /* ViewController.m */,
+				8BE560CB1CB96088000B04A2 /* DetailViewController.h */,
+				8BE560CC1CB96088000B04A2 /* DetailViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -253,10 +272,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B4EE8101CB80A3F005B51E5 /* PokeCell.m in Sources */,
+				8B4EE8151CB90DD2005B51E5 /* PokemonStore.m in Sources */,
 				8B4EE7F91CB7DFD8005B51E5 /* ViewController.m in Sources */,
 				8B4EE80B1CB7E1B8005B51E5 /* Pokemon.m in Sources */,
 				8B4EE7F61CB7DFD8005B51E5 /* AppDelegate.m in Sources */,
 				8B4EE7F31CB7DFD8005B51E5 /* main.m in Sources */,
+				8BE560CD1CB96088000B04A2 /* DetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
